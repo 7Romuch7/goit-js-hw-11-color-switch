@@ -15,28 +15,22 @@ const colors = [
 
 const randomIntegerFromInterval = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
+
 };
+let timerId = null;
 
-const countdown = {
-  isActive: false,
-  start() {
-    if (this.isActive) {
-      return;
-    }
+refs.btnStart.addEventListener("click", () => {
+  timerId = setInterval(() => {
+    refs.body.style.backgroundColor = colors[randomIntegerFromInterval(0, colors.length - 1)];
+    refs.btnStart.disabled = true;
+    refs.btnStop.disabled = false;
+    console.log(colors[randomIntegerFromInterval(0, colors.length - 1)]);
+  }, 1000);
+});
 
-    this.isActive = true;
-    changeColors = setInterval(() => {
-      const min = 0;
-      const max = colors.length - 1;
-      let index = randomIntegerFromInterval(min, max);
-      refs.body.style.backgroundColor = colors[index];
-    }, 1000);
-  },
-  stop() {
-    clearInterval(changeColors);
-    this.isActive = false;
-  },
-};
 
-refs.btnStart.addEventListener("click", countdown.start.bind(countdown));
-refs.btnStop.addEventListener("click", countdown.stop.bind(countdown));
+refs.btnStop.addEventListener("click", () => {
+  clearInterval(timerId);
+  refs.btnStart.disabled = false;
+    refs.btnStop.disabled = true;
+});
